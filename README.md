@@ -10,7 +10,13 @@ This is a maintained fork of [manmal/marktguru-cli](https://github.com/manmal/ma
 
 ## AI Agent Skill
 
-See [SKILL.md](SKILL.md) for a comprehensive reference designed for AI coding agents.
+Install into your coding agent with the [`skills`](https://skills.sh) CLI:
+
+```bash
+npx skills add udondan/marktguru-cli
+```
+
+Or read [skills/marktguru-grocery-deals/SKILL.md](skills/marktguru-grocery-deals/SKILL.md) directly — a comprehensive reference designed for AI coding agents.
 
 ## Quick Start (Recommended)
 
