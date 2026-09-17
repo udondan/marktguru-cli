@@ -21,7 +21,7 @@ const program = new Command();
 program
   .name('marktguru')
   .description('CLI for Marktguru supermarket deals (AT/DE)')
-  .version('0.1.0')
+  .version('0.1.0') // x-release-please-version
   .option('-j, --json', 'Output JSON (for all commands)');
 
 program.addHelpText(
