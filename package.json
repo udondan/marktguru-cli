@@ -47,7 +47,7 @@
     "access": "public"
   },
   "dependencies": {
-    "commander": "12.1.0",
+    "commander": "15.0.0",
     "header-generator": "2.1.88"
   },
   "devDependencies": {
