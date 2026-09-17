@@ -9,6 +9,8 @@
   "prerelease": false,
   "bootstrap-sha": "9855964f564947c4c8532bdc1523f420780591b3",
   "packages": {
-    ".": {}
+    ".": {
+      "extra-files": ["src/cli.ts"]
+    }
   }
 }
