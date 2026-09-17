@@ -18,6 +18,15 @@
   "bugs": {
     "url": "https://github.com/udondan/marktguru-cli/issues"
   },
+  "keywords": [
+    "cli",
+    "marktguru",
+    "grocery",
+    "deals",
+    "discounts",
+    "austria",
+    "germany"
+  ],
   "type": "module",
   "bin": {
     "marktguru": "dist/cli.js"
