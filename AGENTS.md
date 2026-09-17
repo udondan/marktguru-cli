@@ -96,6 +96,8 @@ weekly rather than per merge. The resulting `v*` tag triggers
 
 ## Keep in sync
 
-`SKILL.md` documents *using* the CLI for agents that consume it; `README.md`
-documents the same surface for humans. Changing a command or flag means updating
-both.
+`skills/marktguru-grocery-deals/SKILL.md` documents _using_ the CLI for agents
+that consume it; `README.md` documents the same surface for humans. Changing a
+command or flag means updating both. The directory name has to match the
+skill's frontmatter `name`, and the `skills/<name>/SKILL.md` layout is what the
+`skills` CLI discovers and installs.
