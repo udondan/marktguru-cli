@@ -1,4 +1,5 @@
 # marktguru-cli 🧘‍♂️
+
 [![Test](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml/badge.svg)](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/@udondan/marktguru-cli.svg)](https://www.npmjs.com/package/@udondan/marktguru-cli)
 [![license](https://img.shields.io/github/license/udondan/marktguru-cli.svg)](https://github.com/udondan/marktguru-cli/blob/main/LICENSE)
@@ -8,10 +9,13 @@ CLI for Marktguru supermarket deals in Austria and Germany.
 This is a maintained fork of [manmal/marktguru-cli](https://github.com/manmal/marktguru-cli), published as [`@udondan/marktguru-cli`](https://www.npmjs.com/package/@udondan/marktguru-cli).
 
 ## AI Agent Skill
+
 See [SKILL.md](SKILL.md) for a comprehensive reference designed for AI coding agents.
 
 ## Quick Start (Recommended)
+
 Use `npx` to run without installing anything:
+
 ```bash
 npx --yes @udondan/marktguru-cli login
 npx --yes @udondan/marktguru-cli search raw "milch OR soja"
@@ -19,47 +23,58 @@ npx --yes @udondan/marktguru-cli search build --term milch --or soja
 ```
 
 ## Requirements
+
 - Node.js 18+ (built-in `fetch`)
 - Works with `npm`, `pnpm`, and `bun`
 
 ## Commands
+
 Login (extracts API key via HTTP by scanning the site’s JS):
+
 ```bash
 marktguru login
 ```
 
 Search (raw query string syntax):
+
 ```bash
 marktguru search raw "kellys OR \"erdnuss snips\""
 ```
 
 Search (structured builder):
+
 ```bash
 marktguru search build --term kellys --phrase "erdnuss snips" --or manner --explain
 ```
 
 Show supported query syntax:
+
 ```bash
 marktguru search syntax
 ```
 
 Set a default ZIP code:
+
 ```bash
 marktguru set-zip 1010
 ```
 
 Set a default country (`at` or `de`, default: `at`):
+
 ```bash
 marktguru set-country de
 ```
 
 Show config:
+
 ```bash
 marktguru config
 ```
 
 ## Also Working (Install Locally)
+
 Install and run from source:
+
 ```bash
 npm ci
 npm run build
@@ -67,12 +82,24 @@ npm start -- --help
 ```
 
 Dev mode (TS directly):
+
 ```bash
 npm run dev -- --help
 ```
 
+Lint, format and test (same targets CI runs):
+
+```bash
+make eslint
+make format
+make test
+make validate-package
+```
+
 ## Search Options
+
 Available for both `search raw` and `search build`:
+
 - `-z, --zip <code>`: ZIP code for location-based results
 - `-n, --limit <number>`: Number of results (default: 10)
 - `-r, --retailer <name>`: Filter by retailer (client-side)
@@ -83,6 +110,7 @@ If no API key is configured, `search` will automatically run `login` to extract 
 Note: API keys are country-specific. After switching country with `set-country`, run `login` again to fetch the matching key.
 
 Builder-only:
+
 - `--term <value>`: Add a term (repeatable)
 - `--phrase <value>`: Add an exact phrase (repeatable)
 - `--wildcard <value>`: Add a wildcard term like `kell*` (repeatable)
@@ -91,21 +119,26 @@ Builder-only:
 - `--explain`: Print the built query to stderr
 
 ## Query Syntax (Observed)
+
 The API appears to accept a Lucene/Elasticsearch-style query string, not SQL.
 
 Supported:
+
 - `OR` for boolean OR
 - `*` wildcard (e.g., `kell*`)
 - `"..."` exact phrase
 - `( ... )` grouping
 
 Not supported (observed):
+
 - `AND`, `NOT`, `~`, `^`
 
 ## Notes on `login`
+
 - Uses HTTP requests (no browser automation).
 - Scans entry HTML and boot scripts for embedded API keys and validates them.
 - May break if the website changes.
 
 ## Config Location
+
 - `~/.marktguru/config.json`
