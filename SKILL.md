@@ -25,28 +25,28 @@ Query grocery deals from Marktguru in Austria and Germany. Supports raw queries,
 
 ### Login (HTTP scan)
 ```bash
-npx marktguru-cli login
+npx @udondan/marktguru-cli login
 ```
 Scans site HTML and boot scripts for embedded API keys. No browser automation required.
 
 ### Set Default ZIP Code
 ```bash
-npx marktguru-cli set-zip 1010
-npx marktguru-cli set-zip 8010  # Graz
-npx marktguru-cli set-zip 10115  # Berlin (DE)
+npx @udondan/marktguru-cli set-zip 1010
+npx @udondan/marktguru-cli set-zip 8010  # Graz
+npx @udondan/marktguru-cli set-zip 10115  # Berlin (DE)
 ```
 
 ### Set Default Country
 ```bash
-npx marktguru-cli set-country at  # Austria (default)
-npx marktguru-cli set-country de  # Germany
+npx @udondan/marktguru-cli set-country at  # Austria (default)
+npx @udondan/marktguru-cli set-country de  # Germany
 ```
 After switching country, re-run `login` — API keys are country-specific.
 
 ### Check Config
 ```bash
-npx marktguru-cli config
-npx marktguru-cli config --json
+npx @udondan/marktguru-cli config
+npx @udondan/marktguru-cli config --json
 ```
 
 ---
@@ -56,11 +56,11 @@ npx marktguru-cli config --json
 ### Raw Query Search
 
 ```bash
-npx marktguru-cli search raw "Milch"
-npx marktguru-cli search raw "Milch" --limit 5
-npx marktguru-cli search raw "Bier" --retailer HOFER
-npx marktguru-cli search raw "Brot" --zip 8010
-npx marktguru-cli search raw "Cola" --json
+npx @udondan/marktguru-cli search raw "Milch"
+npx @udondan/marktguru-cli search raw "Milch" --limit 5
+npx @udondan/marktguru-cli search raw "Bier" --retailer HOFER
+npx @udondan/marktguru-cli search raw "Brot" --zip 8010
+npx @udondan/marktguru-cli search raw "Cola" --json
 ```
 
 ### Common Options
@@ -77,10 +77,10 @@ npx marktguru-cli search raw "Cola" --json
 Build queries from flags instead of raw strings:
 
 ```bash
-npx marktguru-cli search build --term butter --explain
-npx marktguru-cli search build --or butter --or margarine --explain
-npx marktguru-cli search build --phrase "frische milch" --limit 5
-npx marktguru-cli search build --wildcard "jogh*" --retailer SPAR
+npx @udondan/marktguru-cli search build --term butter --explain
+npx @udondan/marktguru-cli search build --or butter --or margarine --explain
+npx @udondan/marktguru-cli search build --phrase "frische milch" --limit 5
+npx @udondan/marktguru-cli search build --wildcard "jogh*" --retailer SPAR
 ```
 
 | Flag | Description |
@@ -108,19 +108,19 @@ npx marktguru-cli search build --wildcard "jogh*" --retailer SPAR
 
 ```bash
 # Simple term
-npx marktguru-cli search raw "Butter"
+npx @udondan/marktguru-cli search raw "Butter"
 
 # OR logic
-npx marktguru-cli search raw "Käse OR Schinken"
+npx @udondan/marktguru-cli search raw "Käse OR Schinken"
 
 # Wildcard
-npx marktguru-cli search raw "Bio*"
+npx @udondan/marktguru-cli search raw "Bio*"
 
 # Combined with retailer filter
-npx marktguru-cli search raw "Bier" --retailer HOFER --limit 10
+npx @udondan/marktguru-cli search raw "Bier" --retailer HOFER --limit 10
 
 # Exact phrase
-npx marktguru-cli search raw '"Coca Cola"'
+npx @udondan/marktguru-cli search raw '"Coca Cola"'
 ```
 
 ---
@@ -149,7 +149,7 @@ npx marktguru-cli search raw '"Coca Cola"'
 ## JSON Output
 
 ```bash
-npx marktguru-cli search raw "Cola" --limit 3 --json
+npx @udondan/marktguru-cli search raw "Cola" --limit 3 --json
 ```
 
 ```json
@@ -214,7 +214,7 @@ Premium Bergbauern H-Milch [Salzburg Milch]
 Credentials and settings stored at `~/.marktguru/config.json`.
 
 ```bash
-npx marktguru-cli config --json
+npx @udondan/marktguru-cli config --json
 ```
 
 ```json
@@ -236,7 +236,7 @@ npx marktguru-cli config --json
 | Login fails | Site structure may have changed. Re-run `login` or check for CLI updates. |
 | No results | Try broader terms, wildcards (`*`), or alternative spellings. |
 | Wrong location | Set ZIP code with `set-zip` or use `--zip` flag. |
-| API key expired | Re-run `npx marktguru-cli login` to refresh. |
+| API key expired | Re-run `npx @udondan/marktguru-cli login` to refresh. |
 | Wrong country results | Run `set-country de` (or `at`), then `login` again — keys are country-specific. |
 
 ---

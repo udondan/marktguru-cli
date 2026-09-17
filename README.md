@@ -1,9 +1,11 @@
 # marktguru-cli 🧘‍♂️
-[![CI](https://github.com/manmal/marktguru-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/manmal/marktguru-cli/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/marktguru-cli.svg)](https://www.npmjs.com/package/marktguru-cli)
-[![license](https://img.shields.io/github/license/manmal/marktguru-cli.svg)](https://github.com/manmal/marktguru-cli/blob/main/LICENSE)
+[![Test](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml/badge.svg)](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/@udondan/marktguru-cli.svg)](https://www.npmjs.com/package/@udondan/marktguru-cli)
+[![license](https://img.shields.io/github/license/udondan/marktguru-cli.svg)](https://github.com/udondan/marktguru-cli/blob/main/LICENSE)
 
 CLI for Marktguru supermarket deals in Austria and Germany.
+
+This is a maintained fork of [manmal/marktguru-cli](https://github.com/manmal/marktguru-cli), published as [`@udondan/marktguru-cli`](https://www.npmjs.com/package/@udondan/marktguru-cli).
 
 ## AI Agent Skill
 See [SKILL.md](SKILL.md) for a comprehensive reference designed for AI coding agents.
@@ -11,9 +13,9 @@ See [SKILL.md](SKILL.md) for a comprehensive reference designed for AI coding ag
 ## Quick Start (Recommended)
 Use `npx` to run without installing anything:
 ```bash
-npx --yes marktguru-cli login
-npx --yes marktguru-cli search raw "milch OR soja"
-npx --yes marktguru-cli search build --term milch --or soja
+npx --yes @udondan/marktguru-cli login
+npx --yes @udondan/marktguru-cli search raw "milch OR soja"
+npx --yes @udondan/marktguru-cli search build --term milch --or soja
 ```
 
 ## Requirements
@@ -59,14 +61,14 @@ marktguru config
 ## Also Working (Install Locally)
 Install and run from source:
 ```bash
-pnpm install
-pnpm run build
-pnpm run start -- --help
+npm ci
+npm run build
+npm start -- --help
 ```
 
 Dev mode (TS directly):
 ```bash
-pnpm run dev -- --help
+npm run dev -- --help
 ```
 
 ## Search Options
