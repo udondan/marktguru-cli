@@ -1,6 +1,6 @@
-import { homedir } from "os";
-import { join } from "path";
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { homedir } from 'os';
+import { join } from 'path';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 
 export interface Config {
   apiKey?: string;
@@ -9,18 +9,18 @@ export interface Config {
   configPath: string;
 }
 
-export const DEFAULT_ZIP_CODE = "1010"; // Vienna
-export const DEFAULT_COUNTRY = "at";
-export const VALID_COUNTRIES = ["at", "de"] as const;
+export const DEFAULT_ZIP_CODE = '1010'; // Vienna
+export const DEFAULT_COUNTRY = 'at';
+export const VALID_COUNTRIES = ['at', 'de'] as const;
 export type Country = (typeof VALID_COUNTRIES)[number];
 
-const CONFIG_DIR = join(homedir(), ".marktguru");
-const CONFIG_FILE = join(CONFIG_DIR, "config.json");
+const CONFIG_DIR = join(homedir(), '.marktguru');
+const CONFIG_FILE = join(CONFIG_DIR, 'config.json');
 
 export async function getConfig(): Promise<Config> {
   try {
-    const data = await readFile(CONFIG_FILE, "utf-8");
-    const parsed = JSON.parse(data);
+    const data = await readFile(CONFIG_FILE, 'utf-8');
+    const parsed = JSON.parse(data) as Partial<Config>;
     return { country: DEFAULT_COUNTRY, ...parsed, configPath: CONFIG_FILE };
   } catch {
     return { country: DEFAULT_COUNTRY, configPath: CONFIG_FILE };

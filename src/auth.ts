@@ -1,34 +1,37 @@
-import { VALID_COUNTRIES } from "./config.js";
+import { VALID_COUNTRIES } from './config.js';
 
 interface ExtractOptions {
   log?: (message: string) => void;
   country?: string;
 }
 
-const DEFAULT_ZIP_CODE = "1010";
+const DEFAULT_ZIP_CODE = '1010';
 const MAX_SCRIPTS = 20;
 
 async function maybeGetHeaders(): Promise<Record<string, string>> {
   try {
-    const { HeaderGenerator } = await import("header-generator");
+    const { HeaderGenerator } = await import('header-generator');
     const generator = new HeaderGenerator({
-      browsers: [{ name: "chrome", minVersion: 110 }],
-      devices: ["desktop"],
-      operatingSystems: ["macos"],
+      browsers: [{ name: 'chrome', minVersion: 110 }],
+      devices: ['desktop'],
+      operatingSystems: ['macos'],
     });
-    return generator.getHeaders({ httpVersion: "2" });
+    return generator.getHeaders({ httpVersion: '2' });
   } catch {
     return {
-      "user-agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      "accept-language": "en-US,en;q=0.9",
-      "accept-encoding": "gzip, deflate, br",
+      'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'accept-language': 'en-US,en;q=0.9',
+      'accept-encoding': 'gzip, deflate, br',
     };
   }
 }
 
-async function fetchText(url: string, headers: Record<string, string>): Promise<string> {
+async function fetchText(
+  url: string,
+  headers: Record<string, string>,
+): Promise<string> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
@@ -43,17 +46,17 @@ async function fetchText(url: string, headers: Record<string, string>): Promise<
 }
 
 async function fetchFirstOk(urls: string[], headers: Record<string, string>) {
-  let lastError: unknown = null;
+  let lastError: Error | null = null;
   for (const url of urls) {
     try {
       const text = await fetchText(url, headers);
       return { url, text };
     } catch (error) {
-      lastError = error;
+      lastError = error instanceof Error ? error : new Error(String(error));
     }
   }
   if (lastError) throw lastError;
-  throw new Error("No URLs to fetch.");
+  throw new Error('No URLs to fetch.');
 }
 
 function extractScriptUrls(html: string, baseUrl: string): string[] {
@@ -62,9 +65,9 @@ function extractScriptUrls(html: string, baseUrl: string): string[] {
   let match: RegExpExecArray | null;
   while ((match = regex.exec(html))) {
     let src = match[1];
-    if (src.startsWith("//")) src = `https:${src}`;
-    if (src.startsWith("/")) src = `${baseUrl}${src}`;
-    if (src.startsWith("http")) urls.add(src);
+    if (src.startsWith('//')) src = `https:${src}`;
+    if (src.startsWith('/')) src = `${baseUrl}${src}`;
+    if (src.startsWith('http')) urls.add(src);
   }
   return [...urls];
 }
@@ -86,7 +89,7 @@ function findCandidates(text: string): string[] {
   const base64Regex = /[A-Za-z0-9+/]{40,80}={0,2}/g;
   while ((match = base64Regex.exec(text))) {
     const value = match[0];
-    if (value.length >= 40 && value.length <= 60 && value.includes("=")) {
+    if (value.length >= 40 && value.length <= 60 && value.includes('=')) {
       candidates.add(value);
     }
   }
@@ -101,8 +104,8 @@ async function validateKey(apiKey: string, apiBase: string): Promise<boolean> {
   try {
     const res = await fetch(url, {
       headers: {
-        "x-apikey": apiKey,
-        "accept": "application/json",
+        'x-apikey': apiKey,
+        accept: 'application/json',
       },
       signal: controller.signal,
     });
@@ -112,11 +115,15 @@ async function validateKey(apiKey: string, apiBase: string): Promise<boolean> {
   }
 }
 
-export async function extractApiKey(options: ExtractOptions = {}): Promise<string> {
+export async function extractApiKey(
+  options: ExtractOptions = {},
+): Promise<string> {
   const log = options.log;
-  const country = options.country ?? "at";
+  const country = options.country ?? 'at';
   if (!(VALID_COUNTRIES as readonly string[]).includes(country)) {
-    throw new Error(`Unsupported country "${country}". Valid options: ${VALID_COUNTRIES.join(", ")}`);
+    throw new Error(
+      `Unsupported country "${country}". Valid options: ${VALID_COUNTRIES.join(', ')}`,
+    );
   }
   const baseUrl = `https://www.marktguru.${country}`;
   const apiBase = `https://api.marktguru.${country}/api/v1`;
@@ -130,7 +137,7 @@ export async function extractApiKey(options: ExtractOptions = {}): Promise<strin
     `${baseUrl}/suche?q=test`,
   ];
 
-  log?.("→ Fetching entry HTML...");
+  log?.('→ Fetching entry HTML...');
   const { url: entryUrl, text: html } = await fetchFirstOk(entryUrls, headers);
   log?.(`✓ Using entry URL: ${entryUrl}`);
 
@@ -138,7 +145,7 @@ export async function extractApiKey(options: ExtractOptions = {}): Promise<strin
 
   const scripts = extractScriptUrls(html, baseUrl).slice(0, MAX_SCRIPTS);
   if (scripts.length === 0) {
-    throw new Error("No scripts found to scan for API keys.");
+    throw new Error('No scripts found to scan for API keys.');
   }
 
   log?.(`→ Scanning ${scripts.length} script(s)...`);
@@ -159,5 +166,7 @@ export async function extractApiKey(options: ExtractOptions = {}): Promise<strin
     }
   }
 
-  throw new Error("Failed to capture a valid API key. The site may have changed.");
+  throw new Error(
+    'Failed to capture a valid API key. The site may have changed.',
+  );
 }

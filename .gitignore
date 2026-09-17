@@ -7,3 +7,5 @@ yarn-error.log*
 .DS_Store
 AGENTS.md
 CLAUDE.md
+.npm/
+*.tgz

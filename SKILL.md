@@ -9,27 +9,30 @@ Query grocery deals from Marktguru in Austria and Germany. Supports raw queries,
 
 ## Quick Reference
 
-| Command | Purpose |
-|---------|---------|
-| `search raw <query>` | Search with raw query string |
-| `search build` | Build query from structured flags |
-| `search syntax` | Show supported query syntax |
-| `set-zip <code>` | Set default ZIP code |
+| Command              | Purpose                                           |
+| -------------------- | ------------------------------------------------- |
+| `search raw <query>` | Search with raw query string                      |
+| `search build`       | Build query from structured flags                 |
+| `search syntax`      | Show supported query syntax                       |
+| `set-zip <code>`     | Set default ZIP code                              |
 | `set-country <code>` | Set default country (`at` or `de`, default: `at`) |
-| `config` | Show current configuration |
-| `login` | Extract API key from marktguru.at/de |
+| `config`             | Show current configuration                        |
+| `login`              | Extract API key from marktguru.at/de              |
 
 ---
 
 ## Setup
 
 ### Login (HTTP scan)
+
 ```bash
 npx @udondan/marktguru-cli login
 ```
+
 Scans site HTML and boot scripts for embedded API keys. No browser automation required.
 
 ### Set Default ZIP Code
+
 ```bash
 npx @udondan/marktguru-cli set-zip 1010
 npx @udondan/marktguru-cli set-zip 8010  # Graz
@@ -37,13 +40,16 @@ npx @udondan/marktguru-cli set-zip 10115  # Berlin (DE)
 ```
 
 ### Set Default Country
+
 ```bash
 npx @udondan/marktguru-cli set-country at  # Austria (default)
 npx @udondan/marktguru-cli set-country de  # Germany
 ```
+
 After switching country, re-run `login` — API keys are country-specific.
 
 ### Check Config
+
 ```bash
 npx @udondan/marktguru-cli config
 npx @udondan/marktguru-cli config --json
@@ -65,12 +71,12 @@ npx @udondan/marktguru-cli search raw "Cola" --json
 
 ### Common Options
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--limit <n>` / `-n` | Number of results | 10 |
-| `--retailer <name>` / `-r` | Filter by retailer (e.g., SPAR, BILLA, HOFER) | all |
-| `--zip <code>` / `-z` | ZIP code for location-based results | config default |
-| `--json` / `-j` | Output JSON | false |
+| Flag                       | Description                                   | Default        |
+| -------------------------- | --------------------------------------------- | -------------- |
+| `--limit <n>` / `-n`       | Number of results                             | 10             |
+| `--retailer <name>` / `-r` | Filter by retailer (e.g., SPAR, BILLA, HOFER) | all            |
+| `--zip <code>` / `-z`      | ZIP code for location-based results           | config default |
+| `--json` / `-j`            | Output JSON                                   | false          |
 
 ### Structured Builder
 
@@ -83,20 +89,21 @@ npx @udondan/marktguru-cli search build --phrase "frische milch" --limit 5
 npx @udondan/marktguru-cli search build --wildcard "jogh*" --retailer SPAR
 ```
 
-| Flag | Description |
-|------|-------------|
-| `--term <value>` | Add a search term |
-| `--phrase <value>` | Add exact phrase (quoted) |
-| `--wildcard <value>` | Add wildcard term (e.g., `kell*`) |
-| `--or <value>` | Add term to OR group (repeat for multiple) |
-| `--group <value>` | Add raw parenthesized group |
-| `--explain` | Print the built query to stderr |
+| Flag                 | Description                                |
+| -------------------- | ------------------------------------------ |
+| `--term <value>`     | Add a search term                          |
+| `--phrase <value>`   | Add exact phrase (quoted)                  |
+| `--wildcard <value>` | Add wildcard term (e.g., `kell*`)          |
+| `--or <value>`       | Add term to OR group (repeat for multiple) |
+| `--group <value>`    | Add raw parenthesized group                |
+| `--explain`          | Print the built query to stderr            |
 
 ---
 
 ## Query Syntax
 
 **Supported:**
+
 - `OR` — boolean OR: `Milch OR Sahne`
 - `*` — wildcard: `Jogh*` (matches Joghurt, Joghurtdrink, etc.)
 - `"..."` — exact phrase: `"frische Milch"`
@@ -127,22 +134,22 @@ npx @udondan/marktguru-cli search raw '"Coca Cola"'
 
 ## Known Retailers
 
-| Retailer              | AT | DE | Notes                       |
-|-----------------------|----|----|-----------------------------|
-| Lidl                  | ✓  | ✓  |                             |
-| PENNY                 | ✓  | ✓  |                             |
-| dm drogerie markt     | ✓  | ✓  | Drugstore (some food items) |
-| SPAR                  | ✓  |    |                             |
-| INTERSPAR             | ✓  |    | Larger SPAR format          |
-| SPAR-Gourmet          | ✓  |    | Premium SPAR                |
-| BILLA                 | ✓  |    |                             |
-| BILLA PLUS            | ✓  |    | Larger BILLA format         |
-| HOFER                 | ✓  |    | Austrian Aldi               |
-| BIPA                  | ✓  |    | Drugstore                   |
-| Kaufland              |    | ✓  |                             |
-| REWE                  |    | ✓  |                             |
-| Netto Marken-Discount |    | ✓  |                             |
-| ALDI                  |    | ✓  |                             |
+| Retailer              | AT  | DE  | Notes                       |
+| --------------------- | --- | --- | --------------------------- |
+| Lidl                  | ✓   | ✓   |                             |
+| PENNY                 | ✓   | ✓   |                             |
+| dm drogerie markt     | ✓   | ✓   | Drugstore (some food items) |
+| SPAR                  | ✓   |     |                             |
+| INTERSPAR             | ✓   |     | Larger SPAR format          |
+| SPAR-Gourmet          | ✓   |     | Premium SPAR                |
+| BILLA                 | ✓   |     |                             |
+| BILLA PLUS            | ✓   |     | Larger BILLA format         |
+| HOFER                 | ✓   |     | Austrian Aldi               |
+| BIPA                  | ✓   |     | Drugstore                   |
+| Kaufland              |     | ✓   |                             |
+| REWE                  |     | ✓   |                             |
+| Netto Marken-Discount |     | ✓   |                             |
+| ALDI                  |     | ✓   |                             |
 
 ---
 
@@ -183,14 +190,14 @@ npx @udondan/marktguru-cli search raw "Cola" --limit 3 --json
 }
 ```
 
-| Field | Description |
-|-------|-------------|
-| `title` | Product name and brand |
-| `price` | Current offer price (EUR) |
-| `retailer` | Store name |
-| `expires` | Offer expiration date (YYYY-MM-DD) |
+| Field             | Description                               |
+| ----------------- | ----------------------------------------- |
+| `title`           | Product name and brand                    |
+| `price`           | Current offer price (EUR)                 |
+| `retailer`        | Store name                                |
+| `expires`         | Offer expiration date (YYYY-MM-DD)        |
 | `discountPercent` | Discount percentage (null if not on sale) |
-| `externalUrl` | Direct link to retailer (optional) |
+| `externalUrl`     | Direct link to retailer (optional)        |
 
 ---
 
@@ -231,12 +238,12 @@ npx @udondan/marktguru-cli config --json
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Login fails | Site structure may have changed. Re-run `login` or check for CLI updates. |
-| No results | Try broader terms, wildcards (`*`), or alternative spellings. |
-| Wrong location | Set ZIP code with `set-zip` or use `--zip` flag. |
-| API key expired | Re-run `npx @udondan/marktguru-cli login` to refresh. |
+| Issue                 | Solution                                                                        |
+| --------------------- | ------------------------------------------------------------------------------- |
+| Login fails           | Site structure may have changed. Re-run `login` or check for CLI updates.       |
+| No results            | Try broader terms, wildcards (`*`), or alternative spellings.                   |
+| Wrong location        | Set ZIP code with `set-zip` or use `--zip` flag.                                |
+| API key expired       | Re-run `npx @udondan/marktguru-cli login` to refresh.                           |
 | Wrong country results | Run `set-country de` (or `at`), then `login` again — keys are country-specific. |
 
 ---
