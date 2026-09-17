@@ -13,6 +13,10 @@
     {
       "matchPackageNames": ["/.*/"],
       "semanticCommitType": "chore"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
