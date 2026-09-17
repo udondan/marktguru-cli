@@ -42,7 +42,7 @@
     "header-generator": "2.1.80"
   },
   "devDependencies": {
-    "@types/node": "20.19.32",
+    "@types/node": "20.19.43",
     "oxlint": "1.83.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
