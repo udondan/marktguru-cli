@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/udondan/marktguru-cli/compare/v1.0.0...v1.0.1) (2026-09-18)
+
+
+### Miscellaneous Chores
+
+* drop header-generator dependency ([fdb70d0](https://github.com/udondan/marktguru-cli/commit/fdb70d072693d2ac99c33ccc54060a61c13d40a1))
+
 ## [1.0.0](https://github.com/udondan/marktguru-cli/compare/v0.1.0...v1.0.0) (2026-09-17)
 
 
