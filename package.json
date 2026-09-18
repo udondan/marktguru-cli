@@ -49,8 +49,7 @@
     "access": "public"
   },
   "dependencies": {
-    "commander": "15.0.0",
-    "header-generator": "2.1.88"
+    "commander": "15.0.0"
   },
   "devDependencies": {
     "@types/node": "24.13.4",

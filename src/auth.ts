@@ -8,25 +8,12 @@ interface ExtractOptions {
 const DEFAULT_ZIP_CODE = '1010';
 const MAX_SCRIPTS = 20;
 
-async function maybeGetHeaders(): Promise<Record<string, string>> {
-  try {
-    const { HeaderGenerator } = await import('header-generator');
-    const generator = new HeaderGenerator({
-      browsers: [{ name: 'chrome', minVersion: 110 }],
-      devices: ['desktop'],
-      operatingSystems: ['macos'],
-    });
-    return generator.getHeaders({ httpVersion: '2' });
-  } catch {
-    return {
-      'user-agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'accept-language': 'en-US,en;q=0.9',
-      'accept-encoding': 'gzip, deflate, br',
-    };
-  }
-}
+const BROWSER_HEADERS: Record<string, string> = {
+  'user-agent':
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language': 'en-US,en;q=0.9',
+};
 
 async function fetchText(
   url: string,
@@ -127,7 +114,7 @@ export async function extractApiKey(
   }
   const baseUrl = `https://www.marktguru.${country}`;
   const apiBase = `https://api.marktguru.${country}/api/v1`;
-  const headers = await maybeGetHeaders();
+  const headers = BROWSER_HEADERS;
 
   const entryUrls = [
     `${baseUrl}/`,
