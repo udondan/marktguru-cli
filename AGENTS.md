@@ -68,7 +68,9 @@ These are the things that are easy to break without noticing.
   regex-scans the HTML and boot scripts for an embedded key, and brute-force
   validates candidates against the live search endpoint. It makes real network
   requests, cannot be unit-tested offline, and breaks whenever Marktguru ships a
-  new frontend bundle.
+  new frontend bundle. `tests/live.test.js` runs the built CLI end to end
+  against the live sites for both countries (isolated `HOME`), so `make test`
+  needs network access and fails when the scraper breaks.
 - **The key is stored in plaintext** at `~/.marktguru/config.json`. The `config`
   and `login` output truncates it — preserve that.
 - **`--retailer` filters client-side** on `advertisers[].name`, which is why
