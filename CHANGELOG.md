@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.2](https://github.com/udondan/marktguru-cli/compare/v1.0.1...v1.0.2) (2026-09-30)
+
+
+### Dependencies
+
+* **deps:** update dependency @types/node to v24.13.5 ([#20](https://github.com/udondan/marktguru-cli/issues/20)) ([977c1d3](https://github.com/udondan/marktguru-cli/commit/977c1d3dd3bfac00938308c21540720d2b7f70a0))
+* **deps:** update dependency @types/node to v24.13.6 ([#23](https://github.com/udondan/marktguru-cli/issues/23)) ([86f6338](https://github.com/udondan/marktguru-cli/commit/86f63382a2db591cc3a07b1e4028f3f32c6978ba))
+* **deps:** update dependency @types/node to v24.19.0 ([#28](https://github.com/udondan/marktguru-cli/issues/28)) ([813a160](https://github.com/udondan/marktguru-cli/commit/813a1602611fa94d17c1fd16225e3e851cafc1e3))
+* **deps:** update dependency eslint to v10.11.0 ([#22](https://github.com/udondan/marktguru-cli/issues/22)) ([cbf24d6](https://github.com/udondan/marktguru-cli/commit/cbf24d64b466bf8442ec7351e939d26343339175))
+* **deps:** update dependency prettier to v3.9.8 ([#21](https://github.com/udondan/marktguru-cli/issues/21)) ([a53c5be](https://github.com/udondan/marktguru-cli/commit/a53c5bebabec702a4dfee0459e6bb69133d1b3b6))
+* **deps:** update dependency prettier to v3.9.9 ([#26](https://github.com/udondan/marktguru-cli/issues/26)) ([eaeb3c0](https://github.com/udondan/marktguru-cli/commit/eaeb3c0f23e3570cabc3f26dcb2cdfb2216b66c8))
+* **deps:** update dependency tsx to v4.23.15 ([#24](https://github.com/udondan/marktguru-cli/issues/24)) ([8a5fc83](https://github.com/udondan/marktguru-cli/commit/8a5fc83a06d8a2b44e5cfd4d0aa19d56d68f8a28))
+* **deps:** update dependency typescript-eslint to v8.70.1 ([#25](https://github.com/udondan/marktguru-cli/issues/25)) ([d0c242b](https://github.com/udondan/marktguru-cli/commit/d0c242b5f4952d55cec29b0635ea5e3458d4fe97))
+* **deps:** update dependency typescript-eslint to v8.71.0 ([#32](https://github.com/udondan/marktguru-cli/issues/32)) ([4606b00](https://github.com/udondan/marktguru-cli/commit/4606b0057dc9354a71a8c7b255886f238e0930d8))
+
 ## [1.0.1](https://github.com/udondan/marktguru-cli/compare/v1.0.0...v1.0.1) (2026-09-18)
 
 
