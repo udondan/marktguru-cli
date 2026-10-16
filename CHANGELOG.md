@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.3](https://github.com/udondan/marktguru-cli/compare/v1.0.2...v1.0.3) (2026-10-16)
+
+
+### Dependencies
+
+* **deps:** update dependency eslint-plugin-prettier to v5.5.7 ([#42](https://github.com/udondan/marktguru-cli/issues/42)) ([222b740](https://github.com/udondan/marktguru-cli/commit/222b74032207b309f4538c35b7619ddb28f6ad52))
+* **deps:** update dependency typescript-eslint to v8.71.2 ([#41](https://github.com/udondan/marktguru-cli/issues/41)) ([1a6a418](https://github.com/udondan/marktguru-cli/commit/1a6a418e6b2e487049c8f84f6274cff218f66b21))
+* **deps:** update udondan/wait-for-turn to v1.4.0 ([#39](https://github.com/udondan/marktguru-cli/issues/39)) ([8677e03](https://github.com/udondan/marktguru-cli/commit/8677e03ebd49bd079cbc301e272e5ecb081889ee))
+
 ## [1.0.2](https://github.com/udondan/marktguru-cli/compare/v1.0.1...v1.0.2) (2026-10-13)
 
 
