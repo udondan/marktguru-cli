@@ -1,6 +1,6 @@
 {
   "name": "@udondan/marktguru-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI for Marktguru supermarket deals in Austria and Germany",
   "license": "MIT",
   "author": {
