@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/udondan/marktguru-cli/compare/v1.0.3...v1.0.4) (2026-10-22)
+
+
+### Dependencies
+
+* **deps:** update dependency eslint to v10.13.0 ([#44](https://github.com/udondan/marktguru-cli/issues/44)) ([a93593d](https://github.com/udondan/marktguru-cli/commit/a93593d5cbf73149c9224eda4240ef22701b8bc2))
+* **deps:** update dependency typescript-eslint to v8.72.0 ([#46](https://github.com/udondan/marktguru-cli/issues/46)) ([3c612a6](https://github.com/udondan/marktguru-cli/commit/3c612a63d914535a767b2e5c9f5e4ff880db61f3))
+
 ## [1.0.3](https://github.com/udondan/marktguru-cli/compare/v1.0.2...v1.0.3) (2026-10-19)
 
 
