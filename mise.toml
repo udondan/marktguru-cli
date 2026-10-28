@@ -1,0 +1,4 @@
+[tools]
+# The runner's own shellcheck is older and reports differently. actionlint runs it over every `run:` block.
+actionlint = "1.7.12"
+shellcheck = "0.11.0"
