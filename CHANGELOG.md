@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.5](https://github.com/udondan/marktguru-cli/compare/v1.0.4...v1.0.5) (2026-10-31)
+
+
+### Bug Fixes
+
+* **deps:** override minimatch to patched version ([#59](https://github.com/udondan/marktguru-cli/issues/59)) ([0368be5](https://github.com/udondan/marktguru-cli/commit/0368be5b24313994e5a1eb31f26af53a6346d55b))
+
+
+### Dependencies
+
+* **deps:** update dependency node to v26 ([#48](https://github.com/udondan/marktguru-cli/issues/48)) ([e1c1059](https://github.com/udondan/marktguru-cli/commit/e1c1059602a54c05a9e8ab94d38f1adaf7ece71e))
+* **deps:** update dependency typescript-eslint to v8.72.1 ([#54](https://github.com/udondan/marktguru-cli/issues/54)) ([73a19e5](https://github.com/udondan/marktguru-cli/commit/73a19e503685b548cb07360d7997d49e85e57238))
+* **deps:** update jdx/mise-action action to v5 ([#51](https://github.com/udondan/marktguru-cli/issues/51)) ([7908e07](https://github.com/udondan/marktguru-cli/commit/7908e073b0f9c0dc34215b45d6f03b924865f510))
+* **deps:** update jdx/mise-action action to v5.2.4 ([#55](https://github.com/udondan/marktguru-cli/issues/55)) ([9bfe5e3](https://github.com/udondan/marktguru-cli/commit/9bfe5e32ec3709bd80419351b2e96c2cf690f690))
+* **deps:** update udondan/wait-for-turn action to v1.4.2 ([#56](https://github.com/udondan/marktguru-cli/issues/56)) ([cf0f5ae](https://github.com/udondan/marktguru-cli/commit/cf0f5aed612cc15dd7504b5f931bdeee4995d77d))
+* **deps:** update udondan/wait-for-turn action to v1.5.0 ([#57](https://github.com/udondan/marktguru-cli/issues/57)) ([8680adf](https://github.com/udondan/marktguru-cli/commit/8680adf7cac1f6fb1b9c42ddfc973238c3387bbb))
+* **deps:** update udondan/wait-for-turn action to v1.6.0 ([#58](https://github.com/udondan/marktguru-cli/issues/58)) ([4a779b1](https://github.com/udondan/marktguru-cli/commit/4a779b15d38778e3dc35ba834a4c999b3be2ffc9))
+* **deps:** update udondan/wait-for-turn action to v1.7.1 ([#60](https://github.com/udondan/marktguru-cli/issues/60)) ([c7a4e04](https://github.com/udondan/marktguru-cli/commit/c7a4e041a44a4b99ba409e5c00026bc92ef02e19))
+* **deps:** update udondan/wait-for-turn action to v1.8.0 ([#61](https://github.com/udondan/marktguru-cli/issues/61)) ([a2aed6b](https://github.com/udondan/marktguru-cli/commit/a2aed6b1c893a85d578a6ee5315ee73737003ae9))
+* **deps:** update udondan/wait-for-turn action to v1.9.0 ([#62](https://github.com/udondan/marktguru-cli/issues/62)) ([b5e47fa](https://github.com/udondan/marktguru-cli/commit/b5e47fadb596846ce64728a1e51493fa13b48d33))
+
 ## [1.0.4](https://github.com/udondan/marktguru-cli/compare/v1.0.3...v1.0.4) (2026-10-26)
 
 
