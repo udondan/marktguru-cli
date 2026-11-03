@@ -35,7 +35,7 @@ jobs:
       # requires PRs to be up to date, so testing an outdated branch is wasted
       # time: it has to be updated and tested again.
       - name: Wait for turn
-        uses: udondan/wait-for-turn@426db7b535a1b999e919c03a2d85727c9fcdc66d # v1.11.0
+        uses: udondan/wait-for-turn@ccdaf27d92960d8deebd6ac1e91cbc50413d902d # v1.12.0
         with:
           require-up-to-date: true
           label-weights: |
