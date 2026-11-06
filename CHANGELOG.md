@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.6](https://github.com/udondan/marktguru-cli/compare/v1.0.5...v1.0.6) (2026-11-06)
+
+
+### Dependencies
+
+* **deps:** update dependency eslint to v10.14.0 ([#66](https://github.com/udondan/marktguru-cli/issues/66)) ([bdc699e](https://github.com/udondan/marktguru-cli/commit/bdc699efd00dc7ee7b2fa51e79110e956755b735))
+* **deps:** update dependency zizmor to v1.32.0 ([#74](https://github.com/udondan/marktguru-cli/issues/74)) ([4d276cb](https://github.com/udondan/marktguru-cli/commit/4d276cb95a892554fd0470f686ca106cd38bdaf5))
+* **deps:** update jdx/mise-action action to v5.2.5 ([#69](https://github.com/udondan/marktguru-cli/issues/69)) ([1f0e382](https://github.com/udondan/marktguru-cli/commit/1f0e382137176cb2430651d229f4de1842ddcda3))
+* **deps:** update jdx/mise-action action to v5.2.6 ([#73](https://github.com/udondan/marktguru-cli/issues/73)) ([7f974da](https://github.com/udondan/marktguru-cli/commit/7f974daaad8f99644dc03abecd9f092ad61ec222))
+* **deps:** update udondan/wait-for-turn action to v1.11.0 ([#67](https://github.com/udondan/marktguru-cli/issues/67)) ([75e2b24](https://github.com/udondan/marktguru-cli/commit/75e2b24dde449d1aadace18c8d6286b8c15a5e75))
+* **deps:** update udondan/wait-for-turn action to v1.12.0 ([#70](https://github.com/udondan/marktguru-cli/issues/70)) ([4e2bbf3](https://github.com/udondan/marktguru-cli/commit/4e2bbf3c6047f8bed243fb4ff039c2e85d0ffc72))
+* **deps:** update udondan/wait-for-turn action to v1.13.0 ([#71](https://github.com/udondan/marktguru-cli/issues/71)) ([3620312](https://github.com/udondan/marktguru-cli/commit/36203121e81e008dd2ac117cb130433b8904207b))
+* **deps:** update udondan/wait-for-turn action to v1.13.1 ([#72](https://github.com/udondan/marktguru-cli/issues/72)) ([bb3824e](https://github.com/udondan/marktguru-cli/commit/bb3824e7a6121aa7a4c56b6205429a5c987f7a67))
+* **deps:** update udondan/wait-for-turn action to v1.14.0 ([#75](https://github.com/udondan/marktguru-cli/issues/75)) ([0138aa2](https://github.com/udondan/marktguru-cli/commit/0138aa23ad8ffc09627e5049293568deb92038ea))
+
 ## [1.0.5](https://github.com/udondan/marktguru-cli/compare/v1.0.4...v1.0.5) (2026-11-02)
 
 
