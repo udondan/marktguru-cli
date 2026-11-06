@@ -1,0 +1,159 @@
+import { VALID_COUNTRIES } from './config.js';
+
+interface ExtractOptions {
+  log?: (message: string) => void;
+  country?: string;
+}
+
+const DEFAULT_ZIP_CODE = '1010';
+const MAX_SCRIPTS = 20;
+
+const BROWSER_HEADERS: Record<string, string> = {
+  'user-agent':
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language': 'en-US,en;q=0.9',
+};
+
+async function fetchText(
+  url: string,
+  headers: Record<string, string>,
+): Promise<string> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const res = await fetch(url, { headers, signal: controller.signal });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status} for ${url}`);
+    }
+    return await res.text();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function fetchFirstOk(urls: string[], headers: Record<string, string>) {
+  let lastError: Error | null = null;
+  for (const url of urls) {
+    try {
+      const text = await fetchText(url, headers);
+      return { url, text };
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+    }
+  }
+  if (lastError) throw lastError;
+  throw new Error('No URLs to fetch.');
+}
+
+function extractScriptUrls(html: string, baseUrl: string): string[] {
+  const urls = new Set<string>();
+  const regex = /<script[^>]+src=["']([^"']+)["'][^>]*>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(html))) {
+    let src = match[1];
+    if (src.startsWith('//')) src = `https:${src}`;
+    if (src.startsWith('/')) src = `${baseUrl}${src}`;
+    if (src.startsWith('http')) urls.add(src);
+  }
+  return [...urls];
+}
+
+function findCandidates(text: string): string[] {
+  const candidates = new Set<string>();
+
+  const headerRegex = /x-apikey\s*['"]?\s*[:=]\s*['"]([^'"]{10,})['"]/gi;
+  let match: RegExpExecArray | null;
+  while ((match = headerRegex.exec(text))) {
+    candidates.add(match[1]);
+  }
+
+  const apiKeyRegex = /apiKey\s*[:=]\s*['"]([^'"]{10,})['"]/gi;
+  while ((match = apiKeyRegex.exec(text))) {
+    candidates.add(match[1]);
+  }
+
+  const base64Regex = /[A-Za-z0-9+/]{40,80}={0,2}/g;
+  while ((match = base64Regex.exec(text))) {
+    const value = match[0];
+    if (value.length >= 40 && value.length <= 60 && value.includes('=')) {
+      candidates.add(value);
+    }
+  }
+
+  return [...candidates];
+}
+
+async function validateKey(apiKey: string, apiBase: string): Promise<boolean> {
+  const url = `${apiBase}/offers/search?as=web&q=test&limit=1&zipCode=${DEFAULT_ZIP_CODE}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'x-apikey': apiKey,
+        accept: 'application/json',
+      },
+      signal: controller.signal,
+    });
+    return res.ok;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+export async function extractApiKey(
+  options: ExtractOptions = {},
+): Promise<string> {
+  const log = options.log;
+  const country = options.country ?? 'at';
+  if (!(VALID_COUNTRIES as readonly string[]).includes(country)) {
+    throw new Error(
+      `Unsupported country "${country}". Valid options: ${VALID_COUNTRIES.join(', ')}`,
+    );
+  }
+  const baseUrl = `https://www.marktguru.${country}`;
+  const apiBase = `https://api.marktguru.${country}/api/v1`;
+  const headers = BROWSER_HEADERS;
+
+  const entryUrls = [
+    `${baseUrl}/`,
+    `${baseUrl}/search`,
+    `${baseUrl}/search?q=test`,
+    `${baseUrl}/suche`,
+    `${baseUrl}/suche?q=test`,
+  ];
+
+  log?.('→ Fetching entry HTML...');
+  const { url: entryUrl, text: html } = await fetchFirstOk(entryUrls, headers);
+  log?.(`✓ Using entry URL: ${entryUrl}`);
+
+  const candidates = new Set(findCandidates(html));
+
+  const scripts = extractScriptUrls(html, baseUrl).slice(0, MAX_SCRIPTS);
+  if (scripts.length === 0) {
+    throw new Error('No scripts found to scan for API keys.');
+  }
+
+  log?.(`→ Scanning ${scripts.length} script(s)...`);
+  for (const scriptUrl of scripts) {
+    try {
+      const text = await fetchText(scriptUrl, headers);
+      for (const candidate of findCandidates(text)) {
+        candidates.add(candidate);
+      }
+    } catch {
+      // Ignore script fetch failures
+    }
+  }
+
+  for (const candidate of candidates) {
+    if (await validateKey(candidate, apiBase)) {
+      return candidate;
+    }
+  }
+
+  throw new Error(
+    'Failed to capture a valid API key. The site may have changed.',
+  );
+}
