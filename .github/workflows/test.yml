@@ -15,37 +15,24 @@ on:
 
 jobs:
   # Only one run at a time may run the live tests against Marktguru.
-  wait-for-turn:
-    runs-on: ubuntu-latest
-    timeout-minutes: 180
+  boarding-gate:
     permissions:
       actions: read
-      contents: write # lock refs under refs/wait-for-turn/
+      contents: write # lock refs under refs/boarding-gate/
       pull-requests: read # labels for label-weights
-    # A new commit on the branch cancels the waiting of the outdated run, so the
-    # new run doesn't queue behind it. Once a run has the turn, this job is
-    # done: test jobs that already run are never cancelled.
-    concurrency:
-      group: test-wait-${{ github.head_ref || github.ref }}
-      cancel-in-progress: true
-    steps:
-      # Queue order: manual PRs first, then Renovate updates, then the
-      # release-please PR, which is updated after every merge to main anyway.
-      # Fails right away if the branch is behind main. Branch protection
-      # requires PRs to be up to date, so testing an outdated branch is wasted
-      # time: it has to be updated and tested again.
-      - name: Wait for turn
-        uses: udondan/wait-for-turn@07ab57f9695014df862c115751e59327605273a0 # v1.14.0
-        with:
-          require-up-to-date: true
-          label-weights: |
-            autorelease: pending=-10
-            renovate=-5
+      statuses: write # queue position as commit status
+    # Queue order, the concurrency group that cancels outdated waiting runs and
+    # the rebase of branches that are behind main: see
+    # https://github.com/udondan/boarding-gate#reusable-workflow
+    # The rebase needs OVERRIDE_TOKEN: pushes with github.token don't start new runs.
+    uses: udondan/boarding-gate/.github/workflows/boarding-gate.yml@v1
+    secrets:
+      update-token: ${{ secrets.OVERRIDE_TOKEN }}
 
   test:
-    needs: wait-for-turn
+    needs: boarding-gate
     # A skipped job counts as passed for required checks. Run the job even if
-    # wait-for-turn failed and fail it in the first step.
+    # boarding-gate failed and fail it in the first step.
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
 
@@ -55,7 +42,7 @@ jobs:
 
     steps:
       - name: Check turn
-        if: needs.wait-for-turn.result != 'success'
+        if: needs.boarding-gate.result != 'success'
         run: exit 1
 
       - name: Checkout code
@@ -115,7 +102,7 @@ jobs:
 
   # The only test check the ruleset requires, whatever jobs are added later.
   required:
-    needs: [wait-for-turn, test, actions]
+    needs: [boarding-gate, test, actions]
     if: always()
     runs-on: ubuntu-latest
     steps:
