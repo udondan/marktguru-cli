@@ -10,7 +10,9 @@ import {
   text,
   makeOffer,
   makeResult,
-} from './helpers.js';
+  type SearchOutput,
+} from './helpers.ts';
+import type { SearchResult } from '../dist/api.js';
 
 const home = await isolateHome();
 const {
@@ -22,15 +24,15 @@ const {
 } = await import('../dist/commands/search.js');
 const { getConfig, saveConfig } = await import('../dist/config.js');
 
-async function loadFixture() {
+async function loadFixture(): Promise<SearchResult> {
   const raw = await readFile(
     new URL('./fixtures/search-result.json', import.meta.url),
   );
-  return JSON.parse(raw.toString());
+  return JSON.parse(raw.toString()) as SearchResult;
 }
 
 // Answers searches with `result` and records every request.
-function api(result) {
+function api(result: SearchResult) {
   return mockFetch(() => json(result));
 }
 
@@ -60,7 +62,7 @@ test('formatResultsText lists offers and the top five retailers', () => {
   );
 
   assert.match(output, /^Found 7 offers for "chips":/);
-  assert.equal(output.match(/Test Chips \[SnackCo\]/g).length, 2);
+  assert.equal(output.match(/Test Chips \[SnackCo\]/g)?.length, 2);
   assert.match(
     output,
     /📍 Retailers: A \(1\), B \(2\), C \(3\), D \(4\), E \(5\)$/,
@@ -168,7 +170,7 @@ test('search raw prints text results with the default limit', async () => {
   assert.equal(url.searchParams.get('limit'), '10');
   assert.equal(calls[0].init.headers['x-apikey'], 'stored-key');
   assert.match(io.stdout, /^Found 30 offers for "chips":/);
-  assert.equal(io.stdout.match(/Test Chips/g).length, 10);
+  assert.equal(io.stdout.match(/Test Chips/g)?.length, 10);
 });
 
 test('search raw prints JSON and passes ZIP code and country', async () => {
@@ -212,7 +214,7 @@ test('search raw filters by retailer client-side', async () => {
   await searchRawCommand('chips', { json: true, retailer: 'spar', limit: 2 });
 
   assert.equal(new URL(calls[0].url).searchParams.get('limit'), '100');
-  const output = JSON.parse(io.stdout);
+  const output = JSON.parse(io.stdout) as SearchOutput;
   assert.equal(output.total, 2);
   assert.deepEqual(
     output.offers.map((offer) => offer.retailer),
@@ -235,7 +237,7 @@ test('search raw rejects an invalid limit', async () => {
 });
 
 // A site whose app.js embeds `key`, which the search endpoint accepts.
-function siteWithKey(key, result) {
+function siteWithKey(key: string, result: SearchResult) {
   return mockFetch((url, init) => {
     if (url.includes('/offers/search')) {
       return init.headers['x-apikey'] === key ? json(result) : text('', 401);

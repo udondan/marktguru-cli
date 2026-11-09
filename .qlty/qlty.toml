@@ -86,14 +86,14 @@ name = "radarlint-js"
 [[triage]]
 match.rules = ["gitleaks:generic-api-key"]
 match.file_patterns = [
-  "tests/auth.test.js",
-  "tests/login.test.js",
-  "tests/program.test.js",
+  "tests/auth.test.ts",
+  "tests/login.test.ts",
+  "tests/program.test.ts",
 ]
 set.ignored = true
 
 # The test throws a non-Error on purpose to check that it gets wrapped
 [[triage]]
-match.rules = ["radarlint-js:javascript:S3696"]
-match.file_patterns = ["tests/auth.test.js"]
+match.rules = ["radarlint-js:typescript:S3696"]
+match.file_patterns = ["tests/auth.test.ts"]
 set.ignored = true

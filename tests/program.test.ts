@@ -10,22 +10,24 @@ import {
   text,
   makeOffer,
   makeResult,
-} from './helpers.js';
+} from './helpers.ts';
 
 const home = await isolateHome();
 const { createProgram } = await import('../dist/program.js');
 const { getConfig, saveConfig } = await import('../dist/config.js');
 const { QUERY_SYNTAX_HELP } = await import('../dist/query.js');
 
+type Command = ReturnType<typeof createProgram>;
+
 // Commander's own output (help, usage errors) is collected per command,
 // since subcommands copy the output settings when they are created.
 function quietProgram() {
   const program = createProgram();
   const output = { out: '', err: '' };
-  const capture = (command) => {
+  const capture = (command: Command) => {
     command.configureOutput({
-      writeOut: (str) => (output.out += str),
-      writeErr: (str) => (output.err += str),
+      writeOut: (str: string) => (output.out += str),
+      writeErr: (str: string) => (output.err += str),
     });
     command.commands.forEach(capture);
   };
@@ -34,7 +36,7 @@ function quietProgram() {
 }
 
 // Runs the CLI in-process and returns Commander's own output.
-async function cli(...args) {
+async function cli(...args: string[]) {
   const { program, output } = quietProgram();
   await program.parseAsync(['node', 'marktguru', ...args]);
   return output;
@@ -207,7 +209,7 @@ test('set-country --json reports whether a key was cleared', async () => {
   await cli('set-country', 'at', '--json');
 
   assert.deepEqual(
-    io.stdout.split('\n').map((line) => JSON.parse(line)),
+    io.stdout.split('\n').map((line): unknown => JSON.parse(line)),
     [
       { success: true, country: 'de', apiKeyCleared: false },
       { success: true, country: 'at', apiKeyCleared: true },
@@ -259,7 +261,7 @@ test('config shows stored values with a truncated key', async () => {
   assert.match(textOutput, /API Key: abcdefghij\.\.\.\n/);
   assert.match(textOutput, /ZIP Code: 10115\n/);
   assert.match(textOutput, /Country: de\n/);
-  const parsed = JSON.parse(`{${jsonOutput}`);
+  const parsed = JSON.parse(`{${jsonOutput}`) as Record<string, unknown>;
   assert.equal(parsed.apiKey, 'abcdefghij...');
   assert.equal(parsed.apiKeySet, true);
   assert.equal(parsed.zipCode, '10115');

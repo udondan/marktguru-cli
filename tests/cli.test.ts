@@ -11,7 +11,7 @@ const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
 test('cli prints the package version', async () => {
   const pkg = JSON.parse(
     await readFile(new URL('../package.json', import.meta.url), 'utf-8'),
-  );
+  ) as { version: string };
   const { stdout } = await run(process.execPath, [CLI, '--version']);
   assert.equal(stdout.trim(), pkg.version);
 });

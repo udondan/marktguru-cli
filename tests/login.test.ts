@@ -2,7 +2,7 @@ import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
 import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isolateHome, captureIo, mockFetch, text } from './helpers.js';
+import { isolateHome, captureIo, mockFetch, text } from './helpers.ts';
 
 const home = await isolateHome();
 const { login } = await import('../dist/commands/login.js');
@@ -66,7 +66,7 @@ test('login reports failures as JSON with --json', async () => {
 
   await assert.rejects(login({ json: true }), { code: 1 });
 
-  const output = JSON.parse(io.stdout);
+  const output = JSON.parse(io.stdout) as { success: boolean; error: string };
   assert.equal(output.success, false);
   assert.match(output.error, /HTTP 503/);
 });

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, writeFile, rm, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isolateHome } from './helpers.js';
+import { isolateHome } from './helpers.ts';
 
 const home = await isolateHome();
 const { getConfig, saveConfig, DEFAULT_COUNTRY } =
@@ -46,7 +46,7 @@ test('saveConfig creates the directory, merges and omits configPath', async () =
   await saveConfig({ zipCode: '1020' });
   await saveConfig({ apiKey: 'secret-key', country: 'de' });
 
-  const persisted = JSON.parse(await readFile(configFile, 'utf-8'));
+  const persisted: unknown = JSON.parse(await readFile(configFile, 'utf-8'));
   assert.deepEqual(persisted, {
     country: 'de',
     zipCode: '1020',

@@ -35,8 +35,8 @@
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "start": "node dist/cli.js",
-    "test": "npm run build && c8 node --test tests/*.test.js",
-    "test:unit": "npm run build && c8 node --test --test-skip-pattern=\"^live:\" tests/*.test.js",
+    "test": "npm run build && tsc -p tsconfig-tests.json && c8 node --test tests/*.test.ts",
+    "test:unit": "npm run build && tsc -p tsconfig-tests.json && c8 node --test --test-skip-pattern=\"^live:\" tests/*.test.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepublishOnly": "npm run build"
