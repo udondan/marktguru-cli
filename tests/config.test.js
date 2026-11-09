@@ -30,6 +30,18 @@ test('getConfig returns defaults when the config file is not valid JSON', async 
   });
 });
 
+test('getConfig treats empty and null values as unset', async () => {
+  await mkdir(configDir, { recursive: true });
+  await writeFile(
+    configFile,
+    JSON.stringify({ apiKey: null, zipCode: '', country: '' }),
+  );
+  assert.deepEqual(await getConfig(), {
+    country: DEFAULT_COUNTRY,
+    configPath: configFile,
+  });
+});
+
 test('saveConfig creates the directory, merges and omits configPath', async () => {
   await saveConfig({ zipCode: '1020' });
   await saveConfig({ apiKey: 'secret-key', country: 'de' });

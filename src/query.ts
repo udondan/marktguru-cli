@@ -74,39 +74,43 @@ function normalizeGroup(value: string): string | null {
   return `(${trimmed})`;
 }
 
-export function buildQuery(input: QueryBuildInput): QueryBuildResult {
-  const parts: string[] = [];
+function normalizeAll(
+  values: string[] | undefined,
+  normalize: (value: string) => string | null,
+): string[] {
+  return (values ?? [])
+    .map(normalize)
+    .filter((token): token is string => token !== null);
+}
+
+function normalizeWildcards(values: string[] | undefined): {
+  tokens: string[];
+  warnings: string[];
+} {
+  const tokens: string[] = [];
   const warnings: string[] = [];
-
-  for (const term of input.terms ?? []) {
-    const token = normalizeTerm(term);
-    if (token) parts.push(token);
-  }
-
-  for (const phrase of input.phrases ?? []) {
-    const token = normalizePhrase(phrase);
-    if (token) parts.push(token);
-  }
-
-  for (const wildcard of input.wildcards ?? []) {
-    const { token, warning } = normalizeWildcard(wildcard);
+  for (const value of values ?? []) {
+    const { token, warning } = normalizeWildcard(value);
     if (warning) warnings.push(warning);
-    if (token) parts.push(token);
+    if (token) tokens.push(token);
   }
+  return { tokens, warnings };
+}
 
-  const orTerms: string[] = [];
-  for (const orTerm of input.ors ?? []) {
-    const token = normalizeTerm(orTerm);
-    if (token) orTerms.push(token);
-  }
-  if (orTerms.length > 0) {
-    parts.push(`(${orTerms.join(' OR ')})`);
-  }
+function buildOrGroup(values: string[] | undefined): string[] {
+  const terms = normalizeAll(values, normalizeTerm);
+  return terms.length > 0 ? [`(${terms.join(' OR ')})`] : [];
+}
 
-  for (const group of input.groups ?? []) {
-    const token = normalizeGroup(group);
-    if (token) parts.push(token);
-  }
+export function buildQuery(input: QueryBuildInput): QueryBuildResult {
+  const wildcards = normalizeWildcards(input.wildcards);
+  const parts = [
+    ...normalizeAll(input.terms, normalizeTerm),
+    ...normalizeAll(input.phrases, normalizePhrase),
+    ...wildcards.tokens,
+    ...buildOrGroup(input.ors),
+    ...normalizeAll(input.groups, normalizeGroup),
+  ];
 
   const query = parts.join(' ').trim();
   if (!query) {
@@ -115,5 +119,5 @@ export function buildQuery(input: QueryBuildInput): QueryBuildResult {
     );
   }
 
-  return { query, warnings };
+  return { query, warnings: wildcards.warnings };
 }

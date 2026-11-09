@@ -1,9 +1,4 @@
-import {
-  getConfig,
-  DEFAULT_ZIP_CODE,
-  DEFAULT_COUNTRY,
-  VALID_COUNTRIES,
-} from './config.js';
+import { getConfig, DEFAULT_ZIP_CODE, VALID_COUNTRIES } from './config.js';
 
 export function getApiBase(country: string): string {
   if (!(VALID_COUNTRIES as readonly string[]).includes(country)) {
@@ -69,14 +64,14 @@ export async function search(options: SearchOptions): Promise<SearchResult> {
     throw new Error("No API key configured. Run 'marktguru login' first.");
   }
 
-  const zipCode = options.zipCode || config.zipCode || DEFAULT_ZIP_CODE;
-  const country = options.country || config.country || DEFAULT_COUNTRY;
+  const zipCode = options.zipCode ?? config.zipCode ?? DEFAULT_ZIP_CODE;
+  const country = options.country ?? config.country;
 
   const params = new URLSearchParams({
     as: 'web',
     q: options.query,
-    limit: String(options.limit || 20),
-    offset: String(options.offset || 0),
+    limit: String(options.limit ?? 20),
+    offset: String(options.offset ?? 0),
     zipCode,
   });
 

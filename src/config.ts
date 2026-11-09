@@ -17,10 +17,22 @@ export type Country = (typeof VALID_COUNTRIES)[number];
 const CONFIG_DIR = join(homedir(), '.marktguru');
 const CONFIG_FILE = join(CONFIG_DIR, 'config.json');
 
-export async function getConfig(): Promise<Config> {
+// The config as loaded: the country falls back to the default.
+export type LoadedConfig = Config & { country: string };
+
+// Empty or null values in a hand-edited config file count as unset.
+function withoutEmptyValues(parsed: Partial<Config>): Partial<Config> {
+  return Object.fromEntries(
+    Object.entries(parsed).filter(
+      ([, value]) => value !== '' && value !== null,
+    ),
+  );
+}
+
+export async function getConfig(): Promise<LoadedConfig> {
   try {
     const data = await readFile(CONFIG_FILE, 'utf-8');
-    const parsed = JSON.parse(data) as Partial<Config>;
+    const parsed = withoutEmptyValues(JSON.parse(data) as Partial<Config>);
     return { country: DEFAULT_COUNTRY, ...parsed, configPath: CONFIG_FILE };
   } catch {
     return { country: DEFAULT_COUNTRY, configPath: CONFIG_FILE };

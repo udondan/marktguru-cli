@@ -3,6 +3,7 @@
 [![Test](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml/badge.svg)](https://github.com/udondan/marktguru-cli/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/@udondan/marktguru-cli.svg)](https://www.npmjs.com/package/@udondan/marktguru-cli)
 [![codecov](https://codecov.io/gh/udondan/marktguru-cli/graph/badge.svg)](https://codecov.io/gh/udondan/marktguru-cli)
+[![Maintainability](https://qlty.sh/gh/udondan/projects/marktguru-cli/maintainability.svg)](https://qlty.sh/gh/udondan/projects/marktguru-cli)
 [![license](https://img.shields.io/github/license/udondan/marktguru-cli.svg)](https://github.com/udondan/marktguru-cli/blob/main/LICENSE)
 
 CLI for Marktguru supermarket deals in Austria and Germany.
