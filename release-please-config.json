@@ -27,7 +27,7 @@
   ],
   "packages": {
     ".": {
-      "extra-files": ["src/cli.ts"]
+      "extra-files": ["src/program.ts"]
     }
   }
 }

@@ -19,6 +19,10 @@ test:
 	@echo -e "$(TARGET_COLOR)Running tests$(NO_COLOR)"
 	@npm test
 
+test-unit:
+	@echo -e "$(TARGET_COLOR)Running unit tests$(NO_COLOR)"
+	@npm run test:unit
+
 eslint:
 	@echo -e "$(TARGET_COLOR)Running eslint $$(npx eslint --version)$(NO_COLOR)"
 	@npx eslint .; \
@@ -45,7 +49,7 @@ validate-package:
 		echo "❌ Failed to list tarball contents"; \
 		exit 1; \
 	fi; \
-	FILES_TO_CHECK="dist/cli.js dist/api.js dist/auth.js dist/config.js dist/query.js LICENSE README.md"; \
+	FILES_TO_CHECK="dist/cli.js dist/program.js dist/api.js dist/auth.js dist/config.js dist/query.js LICENSE README.md"; \
 	MISSING_FILES=""; \
 	for file in $$FILES_TO_CHECK; do \
 		if ! tar -tf "$$TARBALL" "package/$$file" >/dev/null 2>&1; then \

@@ -7,6 +7,7 @@ interface ExtractOptions {
 
 const DEFAULT_ZIP_CODE = '1010';
 const MAX_SCRIPTS = 20;
+const TIMEOUT_MS = 15000;
 
 const BROWSER_HEADERS: Record<string, string> = {
   'user-agent':
@@ -19,21 +20,18 @@ async function fetchText(
   url: string,
   headers: Record<string, string>,
 ): Promise<string> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-  try {
-    const res = await fetch(url, { headers, signal: controller.signal });
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status} for ${url}`);
-    }
-    return await res.text();
-  } finally {
-    clearTimeout(timeout);
+  const res = await fetch(url, {
+    headers,
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} for ${url}`);
   }
+  return await res.text();
 }
 
 async function fetchFirstOk(urls: string[], headers: Record<string, string>) {
-  let lastError: Error | null = null;
+  let lastError = new Error('No URLs to fetch.');
   for (const url of urls) {
     try {
       const text = await fetchText(url, headers);
@@ -42,8 +40,7 @@ async function fetchFirstOk(urls: string[], headers: Record<string, string>) {
       lastError = error instanceof Error ? error : new Error(String(error));
     }
   }
-  if (lastError) throw lastError;
-  throw new Error('No URLs to fetch.');
+  throw lastError;
 }
 
 function extractScriptUrls(html: string, baseUrl: string): string[] {
@@ -86,20 +83,14 @@ function findCandidates(text: string): string[] {
 
 async function validateKey(apiKey: string, apiBase: string): Promise<boolean> {
   const url = `${apiBase}/offers/search?as=web&q=test&limit=1&zipCode=${DEFAULT_ZIP_CODE}`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'x-apikey': apiKey,
-        accept: 'application/json',
-      },
-      signal: controller.signal,
-    });
-    return res.ok;
-  } finally {
-    clearTimeout(timeout);
-  }
+  const res = await fetch(url, {
+    headers: {
+      'x-apikey': apiKey,
+      accept: 'application/json',
+    },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  return res.ok;
 }
 
 export async function extractApiKey(

@@ -1,0 +1,12 @@
+{
+  "all": true,
+  "src": ["src"],
+  "include": ["dist/**/*.js", "src/**/*.ts"],
+  "reporter": ["text", "lcov"],
+  "report-dir": "coverage",
+  "check-coverage": true,
+  "lines": 100,
+  "branches": 100,
+  "functions": 100,
+  "statements": 100
+}
