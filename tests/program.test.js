@@ -216,7 +216,7 @@ test('set-country --json reports whether a key was cleared', async () => {
 });
 
 test('config shows defaults', async () => {
-  // A config file that sets no country either.
+  // An empty country counts as unset.
   await saveConfig({ country: '' });
   const io = captureIo();
 
@@ -231,7 +231,7 @@ test('config shows defaults', async () => {
       'Configuration:',
       '  API Key: (not set)',
       '  ZIP Code: (default: 1010)',
-      '  Country: (default: at)',
+      '  Country: at',
       `  Config file: ${configPath}`,
     ].join('\n'),
   );

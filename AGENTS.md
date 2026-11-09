@@ -16,6 +16,18 @@ make test-unit        # same, offline tests only (what the Coverage workflow run
 make validate-package # npm pack and assert the tarball contents
 ```
 
+The `qlty` CI job runs the [qlty](https://qlty.sh) CLI directly; both must
+report nothing:
+
+```bash
+qlty check --all      # plugins enabled in .qlty/qlty.toml (secrets, vulnerable dependencies, radarlint-js)
+qlty smells --all     # complexity, nesting, duplication; PRs fail on new smells compared to main
+```
+
+Fix findings instead of silencing them. Only a deliberate finding (such as a
+fake key in a test fixture) gets a `[[triage]]` entry in `.qlty/qlty.toml`,
+scoped to the single rule and file, with a comment saying why.
+
 Running the CLI locally — the `--` separator is required to pass flags through
 npm:
 
