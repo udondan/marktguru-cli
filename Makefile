@@ -23,7 +23,8 @@ test-unit:
 	@echo -e "$(TARGET_COLOR)Running unit tests$(NO_COLOR)"
 	@npm run test:unit
 
-eslint:
+# The tests take their types from the declarations in dist/.
+eslint: build
 	@echo -e "$(TARGET_COLOR)Running eslint $$(npx eslint --version)$(NO_COLOR)"
 	@npx eslint .; \
 	echo "Passed"

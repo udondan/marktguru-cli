@@ -7,6 +7,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
+import type { SearchOutput } from './helpers.ts';
 
 const run = promisify(execFile);
 const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
@@ -23,10 +24,11 @@ for (const { country, zip } of COUNTRIES) {
     async () => {
       // Isolated HOME so the test never reads or writes a real ~/.marktguru.
       const home = await mkdtemp(join(tmpdir(), 'marktguru-live-'));
-      const cli = (...args) =>
-        run(process.execPath, [CLI, ...args], {
-          env: { ...process.env, HOME: home, USERPROFILE: home },
-        });
+      const env = { ...process.env };
+      env.HOME = home;
+      env.USERPROFILE = home;
+      const cli = (...args: string[]) =>
+        run(process.execPath, [CLI, ...args], { env });
       try {
         await cli('set-country', country);
 
@@ -41,7 +43,7 @@ for (const { country, zip } of COUNTRIES) {
           '5',
           '--json',
         );
-        const data = JSON.parse(stdout);
+        const data = JSON.parse(stdout) as SearchOutput;
 
         assert.ok(data.total > 0, `no results for "milch" in ${country}`);
         assert.ok(data.offers.length > 0);

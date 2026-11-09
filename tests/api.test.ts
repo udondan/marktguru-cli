@@ -2,7 +2,7 @@ import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
 import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isolateHome, mockFetch, json, makeResult } from './helpers.js';
+import { isolateHome, mockFetch, json, makeResult } from './helpers.ts';
 
 const home = await isolateHome();
 const { getApiBase, search, formatPrice, formatDiscount, formatValidity } =
@@ -116,7 +116,7 @@ test('formatDiscount', () => {
 });
 
 test('formatValidity', () => {
-  const inDays = (days) => [
+  const inDays = (days: number) => [
     { from: '2020-01-01', to: new Date(Date.now() + days).toISOString() },
   ];
   assert.equal(formatValidity([]), '');

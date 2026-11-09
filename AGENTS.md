@@ -39,8 +39,8 @@ npm start -- --help      # from dist/, needs a build first
 Single test file / single test case:
 
 ```bash
-npm run build && node --test tests/query.test.js
-npm run build && node --test --test-name-pattern "<name>" tests/query.test.js
+npm run build && node --test tests/query.test.ts
+npm run build && node --test --test-name-pattern "<name>" tests/query.test.ts
 ```
 
 ## Architecture
@@ -62,17 +62,20 @@ output stays pipeable.
 
 These are the things that are easy to break without noticing.
 
-- **Tests run against `dist/`.** `tests/*.test.js` import `../dist/*.js`, so a
+- **Tests run against `dist/`.** `tests/*.test.ts` import `../dist/*.js`, so a
   stale build silently tests old code. `npm test` runs `npm run build` first for
-  exactly this reason — never invoke bare `node --test`.
+  exactly this reason — never invoke bare `node --test`. Node runs the test
+  files by stripping their types, so they may only use erasable syntax (no
+  enums, namespaces or parameter properties); `tsconfig-tests.json` enforces
+  that and is type-checked by `npm test` against the declarations in `dist/`.
 - **Coverage must stay at 100 %.** `npm test` and `npm run test:unit` run under
   c8 (`.c8rc.json`), which fails below 100 % lines, branches, functions or
   statements and writes `coverage/lcov.info`, mapped back to `src/*.ts` through
   source maps. The offline tests alone must reach 100 %: the Coverage workflow
   uploads `make test-unit` results from `main`, and Codecov requires 100 % patch
   coverage on pull requests. Tests mock `fetch` instead of touching the network,
-  set `HOME` to a temp dir before importing `dist/` (see `tests/helpers.js`),
-  and `tests/cli.test.js` spawns `dist/cli.js`, whose coverage c8 collects as
+  set `HOME` to a temp dir before importing `dist/` (see `tests/helpers.ts`),
+  and `tests/cli.test.ts` spawns `dist/cli.js`, whose coverage c8 collects as
   well. Remove unreachable branches instead of adding `c8 ignore` comments.
 - **release-please owns the version.** `src/program.ts` carries
   `.version('0.1.0') // x-release-please-version`; the trailing comment is
@@ -90,7 +93,7 @@ These are the things that are easy to break without noticing.
   regex-scans the HTML and boot scripts for an embedded key, and brute-force
   validates candidates against the live search endpoint. It breaks whenever
   Marktguru ships a new frontend bundle, which the offline tests in
-  `tests/auth.test.js` (mocked pages) cannot notice. `tests/live.test.js` runs
+  `tests/auth.test.ts` (mocked pages) cannot notice. `tests/live.test.ts` runs
   the built CLI end to end against the live sites for both countries (isolated
   `HOME`), so `make test` needs network access and fails when the scraper
   breaks. `make test-unit` skips the live tests by their `live:` name prefix.
@@ -101,9 +104,10 @@ These are the things that are easy to break without noticing.
   post-filter count.
 - **Two different default limits:** 10 in `src/commands/search.ts`, 20 in the
   `search()` fallback in `src/api.ts`.
-- **ESLint covers only `src/` TypeScript** via the `tsconfig-lint.json` project.
-  The JS tests are not linted, and a new `.ts` file outside `src/` makes
-  type-aware linting fail.
+- **ESLint covers `src/` and `tests/`** via the `tsconfig-lint.json` and
+  `tsconfig-tests.json` projects. Linting the tests needs `dist/*.d.ts`, so
+  `make eslint` builds first. A new `.ts` file anywhere else makes type-aware
+  linting fail.
 - **Exact dependency versions only** — no `^` or `~`.
 - **`make validate-package` asserts a hardcoded file list.** Extend it when a
   new shipped entrypoint is added. It currently omits `dist/commands/*.js` even

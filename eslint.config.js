@@ -16,7 +16,7 @@ export default tseslint.config(
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig-lint.json',
+        project: ['./tsconfig-lint.json', './tsconfig-tests.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -48,9 +48,9 @@ export default tseslint.config(
         },
         { selector: 'typeLike', format: ['PascalCase'] },
         { selector: 'typeProperty', format: ['camelCase'] },
-        // HTTP header names are not camelCase
+        // HTTP header names and URLs are not camelCase
         {
-          selector: 'objectLiteralProperty',
+          selector: ['objectLiteralProperty', 'objectLiteralMethod'],
           format: null,
           modifiers: ['requiresQuotes'],
         },
@@ -59,6 +59,20 @@ export default tseslint.config(
       '@typescript-eslint/prefer-nullish-coalescing': [
         'error',
         { ignorePrimitives: { string: true, number: true } },
+      ],
+    },
+  },
+  {
+    files: ['tests/**/*.ts'],
+    rules: {
+      // node:test runs top-level tests itself; awaiting them is not needed.
+      '@typescript-eslint/no-floating-promises': [
+        'error',
+        {
+          allowForKnownSafeCalls: [
+            { from: 'package', package: 'node:test', name: ['test'] },
+          ],
+        },
       ],
     },
   },

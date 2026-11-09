@@ -1,6 +1,6 @@
 import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
-import { isolateHome, mockFetch, text } from './helpers.js';
+import { isolateHome, mockFetch, text } from './helpers.ts';
 
 await isolateHome();
 const { extractApiKey } = await import('../dist/auth.js');
@@ -10,7 +10,15 @@ const BASE64_KEY = 'QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVphYmNkZWZn=';
 
 // Routes the scraper's requests: `pages` maps a URL to its body, a Response
 // or a function to call; `validKeys` are accepted by the search endpoint.
-function site({ pages, validKeys = [VALID_KEY] }) {
+type Page = string | Response | (() => Response);
+
+function site({
+  pages,
+  validKeys = [VALID_KEY],
+}: {
+  pages: Record<string, Page>;
+  validKeys?: string[];
+}) {
   return mockFetch((url, init) => {
     if (url.includes('/api/v1/offers/search')) {
       return text('', validKeys.includes(init.headers['x-apikey']) ? 200 : 401);
@@ -43,7 +51,7 @@ test('extractApiKey finds a key in a script of the entry page', async () => {
 });
 
 test('extractApiKey logs progress and falls through entry URLs', async () => {
-  const messages = [];
+  const messages: string[] = [];
   site({
     pages: {
       'https://www.marktguru.de/': text('', 500),
@@ -120,6 +128,8 @@ test('extractApiKey fails when no entry URL responds', async () => {
 
 test('extractApiKey wraps non-Error fetch failures', async () => {
   mockFetch(() => {
+    // A non-Error rejection is exactly what this test covers.
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw 'offline';
   });
   await assert.rejects(extractApiKey(), /^Error: offline$/);
