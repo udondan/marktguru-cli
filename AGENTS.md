@@ -11,7 +11,8 @@ prefer them:
 make install          # npm clean-install --prefer-offline --cache .npm
 make eslint           # lint
 make format           # prettier --write .
-make test             # build, then run the test suite
+make test             # build, then run the test suite under c8 (incl. live tests)
+make test-unit        # same, offline tests only (what the Coverage workflow runs)
 make validate-package # npm pack and assert the tarball contents
 ```
 
@@ -35,12 +36,12 @@ npm run build && node --test --test-name-pattern "<name>" tests/query.test.js
 ESM throughout (`"type": "module"`), TypeScript compiled to `dist/` with
 `NodeNext` resolution — relative imports must carry the `.js` extension.
 
-`src/cli.ts` is the Commander entry point and the `bin` target. It delegates to
-a command module in `src/commands/`, which calls `ensureApiKey` (reads
-`src/config.ts`, falls through to `src/auth.ts` when no key is stored), then
-`search()` in `src/api.ts`, then renders through `formatResultsText` or
-`simplifyOffer` in `src/commands/search.ts`. `src/query.ts` is pure and
-I/O-free, which is why it carries most of the test coverage.
+`src/cli.ts` is the `bin` target and only calls `run()` from `src/program.ts`,
+which builds the Commander program (`createProgram()`). Commands delegate to a
+module in `src/commands/`, which calls `ensureApiKey` (reads `src/config.ts`,
+falls through to `src/auth.ts` when no key is stored), then `search()` in
+`src/api.ts`, then renders through `formatResultsText` or `simplifyOffer` in
+`src/commands/search.ts`. `src/query.ts` is pure and I/O-free.
 
 Results go to stdout; `--explain` and every warning go to stderr, so `--json`
 output stays pipeable.
@@ -52,10 +53,19 @@ These are the things that are easy to break without noticing.
 - **Tests run against `dist/`.** `tests/*.test.js` import `../dist/*.js`, so a
   stale build silently tests old code. `npm test` runs `npm run build` first for
   exactly this reason — never invoke bare `node --test`.
-- **release-please owns the version.** `src/cli.ts` carries
+- **Coverage must stay at 100 %.** `npm test` and `npm run test:unit` run under
+  c8 (`.c8rc.json`), which fails below 100 % lines, branches, functions or
+  statements and writes `coverage/lcov.info`, mapped back to `src/*.ts` through
+  source maps. The offline tests alone must reach 100 %: the Coverage workflow
+  uploads `make test-unit` results from `main`, and Codecov requires 100 % patch
+  coverage on pull requests. Tests mock `fetch` instead of touching the network,
+  set `HOME` to a temp dir before importing `dist/` (see `tests/helpers.js`),
+  and `tests/cli.test.js` spawns `dist/cli.js`, whose coverage c8 collects as
+  well. Remove unreachable branches instead of adding `c8 ignore` comments.
+- **release-please owns the version.** `src/program.ts` carries
   `.version('0.1.0') // x-release-please-version`; the trailing comment is
   load-bearing and matches `extra-files` in `release-please-config.json`. Never
-  hand-edit the version in `package.json`, `src/cli.ts`, or
+  hand-edit the version in `package.json`, `src/program.ts`, or
   `.release-please-manifest.json`.
 - **Country validation is a security guard.** The country code is interpolated
   into a hostname, so `getApiBase()` and `extractApiKey()` hard-validate against
@@ -66,11 +76,12 @@ These are the things that are easy to break without noticing.
   configured country.
 - **`login` is scraping, not an account login.** It fetches the public site,
   regex-scans the HTML and boot scripts for an embedded key, and brute-force
-  validates candidates against the live search endpoint. It makes real network
-  requests, cannot be unit-tested offline, and breaks whenever Marktguru ships a
-  new frontend bundle. `tests/live.test.js` runs the built CLI end to end
-  against the live sites for both countries (isolated `HOME`), so `make test`
-  needs network access and fails when the scraper breaks.
+  validates candidates against the live search endpoint. It breaks whenever
+  Marktguru ships a new frontend bundle, which the offline tests in
+  `tests/auth.test.js` (mocked pages) cannot notice. `tests/live.test.js` runs
+  the built CLI end to end against the live sites for both countries (isolated
+  `HOME`), so `make test` needs network access and fails when the scraper
+  breaks. `make test-unit` skips the live tests by their `live:` name prefix.
 - **The key is stored in plaintext** at `~/.marktguru/config.json`. The `config`
   and `login` output truncates it — preserve that.
 - **`--retailer` filters client-side** on `advertisers[].name`, which is why
@@ -84,7 +95,8 @@ These are the things that are easy to break without noticing.
 - **Exact dependency versions only** — no `^` or `~`.
 - **`make validate-package` asserts a hardcoded file list.** Extend it when a
   new shipped entrypoint is added. It currently omits `dist/commands/*.js` even
-  though those ship.
+  though those ship. Source maps are built for coverage but excluded from the
+  package via `!dist/**/*.map` in `files`.
 
 ## Release flow
 
