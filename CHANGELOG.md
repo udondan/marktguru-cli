@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/udondan/marktguru-cli/compare/v1.0.5...v1.0.6) (2026-11-12)
+
+
+### Dependencies
+
+* **deps:** update dependency commander to v15.1.0 ([#85](https://github.com/udondan/marktguru-cli/issues/85)) ([8a873d1](https://github.com/udondan/marktguru-cli/commit/8a873d1d40fc867d4ca4565da5d0ec1cc81fc6fd))
+
 ## [1.0.5](https://github.com/udondan/marktguru-cli/compare/v1.0.4...v1.0.5) (2026-11-02)
 
 

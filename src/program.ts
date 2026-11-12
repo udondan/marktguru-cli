@@ -135,7 +135,7 @@ export function createProgram(): Command {
   program
     .name('marktguru')
     .description('CLI for Marktguru supermarket deals (AT/DE)')
-    .version('1.0.5') // x-release-please-version
+    .version('1.0.6') // x-release-please-version
     .option('-j, --json', 'Output JSON (for all commands)');
 
   program.addHelpText(
