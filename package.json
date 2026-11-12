@@ -1,0 +1,71 @@
+{
+  "name": "@udondan/marktguru-cli",
+  "version": "1.0.6",
+  "description": "CLI for Marktguru supermarket deals in Austria and Germany",
+  "license": "MIT",
+  "author": {
+    "name": "Daniel Schroeder",
+    "url": "https://www.udondan.com/"
+  },
+  "contributors": [
+    "Manuel Maly"
+  ],
+  "homepage": "https://github.com/udondan/marktguru-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udondan/marktguru-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/udondan/marktguru-cli/issues"
+  },
+  "keywords": [
+    "cli",
+    "marktguru",
+    "grocery",
+    "deals",
+    "discounts",
+    "austria",
+    "germany"
+  ],
+  "type": "module",
+  "bin": {
+    "marktguru": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "test": "npm run build && tsc -p tsconfig-tests.json && c8 node --test tests/*.test.ts",
+    "test:unit": "npm run build && tsc -p tsconfig-tests.json && c8 node --test --test-skip-pattern=\"^live:\" tests/*.test.ts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "15.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "c8": "12.0.0",
+    "eslint": "10.14.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.7",
+    "prettier": "3.9.10",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2"
+  },
+  "overrides": {
+    "minimatch": "^11.0.3",
+    "glob": "14.0.4"
+  }
+}

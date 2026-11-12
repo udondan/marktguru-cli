@@ -1,0 +1,8 @@
+.claude
+.npm/
+coverage/
+*.tgz
+dist/
+node_modules/
+npm-debug.log*
+scripts/try-http-login.*
